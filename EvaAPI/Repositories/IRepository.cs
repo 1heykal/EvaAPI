@@ -8,8 +8,8 @@ public interface IRepository<T>
     
     public Task AddAsync(T entity);
     
-    public Task UpdateAsync(T entity);
+    public void Update(T entity);
     
-    public Task DeleteAsync(T entity);
+    public void Delete(T entity);
 
 }

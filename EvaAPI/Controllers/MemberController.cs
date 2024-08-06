@@ -1,30 +1,33 @@
 using EvaAPI.Entities;
 using EvaAPI.Repositories;
+using EvaAPI.UnitOfWork;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EvaAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MemberController : ControllerBase
     {
-        private readonly IRepository<Member> _memberRepository;
+        private readonly IUnitOfWork _unitOfWork;
         
-        public MemberController(IRepository<Member> memberRepository)
+        public MemberController(IUnitOfWork unitOfWork)
         {
-            _memberRepository = memberRepository ?? throw new ArgumentNullException(nameof(memberRepository));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
         
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
-            return Ok(await _memberRepository.GetAllAsync());
+            return Ok(await _unitOfWork.MemberRepository.GetAllAsync());
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var member = await _memberRepository.GetByIdAsync(id);
+            var member = await _unitOfWork.MemberRepository.GetByIdAsync(id);
             return Ok(member);
         }
         
@@ -32,7 +35,8 @@ namespace EvaAPI.Controllers
         public async Task<IActionResult> Add(Member member)
         {
             member.JoinDate = new DateOnly(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day);
-            await _memberRepository.AddAsync(member);
+            await _unitOfWork.MemberRepository.AddAsync(member);
+            await _unitOfWork.SaveChangesAsync();
             
             return CreatedAtAction(nameof(GetById), new { id = member.Id });
         }
@@ -40,24 +44,26 @@ namespace EvaAPI.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, Member member)
         {
-            var memberEntity = await _memberRepository.GetByIdAsync(id);
+            var memberEntity = await _unitOfWork.MemberRepository.GetByIdAsync(id);
 
             if (memberEntity is null)
                 return NotFound($"There is no Member with the provided id: {id}");
             
-            await _memberRepository.UpdateAsync(member);
+            _unitOfWork.MemberRepository.Update(member);
+            await _unitOfWork.SaveChangesAsync();
             return NoContent();
         }
         
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var member = await _memberRepository.GetByIdAsync(id);
+            var member = await _unitOfWork.MemberRepository.GetByIdAsync(id);
 
             if (member is null)
                 return NotFound($"There is no Member with the provided id: {id}");
             
-            await _memberRepository.DeleteAsync(member);
+            _unitOfWork.MemberRepository.Delete(member);
+            await _unitOfWork.SaveChangesAsync();
             return NoContent();
         }
         

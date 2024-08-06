@@ -1,5 +1,6 @@
 using EvaAPI.Entities;
 using EvaAPI.Repositories;
+using EvaAPI.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EvaAPI.Controllers
@@ -8,30 +9,32 @@ namespace EvaAPI.Controllers
     [ApiController]
     public class AuthorController : ControllerBase
     {
-        private readonly IRepository<Author> _authorRepository;
+        private readonly IUnitOfWork _unitOfWork;
         
-        public AuthorController(IRepository<Author> authorRepository)
+        public AuthorController(IUnitOfWork unitOfWork)
         {
-            _authorRepository = authorRepository ?? throw new ArgumentNullException(nameof(authorRepository));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
         
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
-            return Ok(await _authorRepository.GetAllAsync());
+            return Ok(await _unitOfWork.AuthorRepository.GetAllAsync());
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var author = await _authorRepository.GetByIdAsync(id);
+            var author = await _unitOfWork.AuthorRepository.GetByIdAsync(id);
+
             return Ok(author);
         }
         
         [HttpPost]
         public async Task<IActionResult> Add(Author author)
         {
-            await _authorRepository.AddAsync(author);
+            await _unitOfWork.AuthorRepository.AddAsync(author);
+            await _unitOfWork.SaveChangesAsync();
             
             return CreatedAtAction(nameof(GetById), new { id = author.Id });
         }
@@ -39,24 +42,28 @@ namespace EvaAPI.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, Author author)
         {
-            var authorEntity = await _authorRepository.GetByIdAsync(id);
+            var authorEntity = await _unitOfWork.AuthorRepository.GetByIdAsync(id);
 
             if (authorEntity is null)
                 return NotFound($"There is no Author with the provided id: {id}");
             
-            await _authorRepository.UpdateAsync(author);
+            _unitOfWork.AuthorRepository.Update(author);
+            await _unitOfWork.SaveChangesAsync();
+
             return NoContent();
         }
         
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var author = await _authorRepository.GetByIdAsync(id);
+            var author = await _unitOfWork.AuthorRepository.GetByIdAsync(id);
 
             if (author is null)
                 return NotFound($"There is no Author with the provided id: {id}");
             
-            await _authorRepository.DeleteAsync(author);
+            _unitOfWork.AuthorRepository.Delete(author);
+            await _unitOfWork.SaveChangesAsync();
+            
             return NoContent();
         }
 

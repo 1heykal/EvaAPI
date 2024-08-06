@@ -1,4 +1,5 @@
 using EvaAPI.Repositories;
+using EvaAPI.UnitOfWork;
 using EvaLibrary.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +16,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>
