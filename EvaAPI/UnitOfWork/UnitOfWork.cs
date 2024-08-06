@@ -13,7 +13,7 @@ public class UnitOfWork : IUnitOfWork
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    private GenericRepository<Book>? _bookRepository;
+    private IRepository<Book>? _bookRepository;
     public IRepository<Book> BookRepository
     {
         get
@@ -23,7 +23,7 @@ public class UnitOfWork : IUnitOfWork
         }
     }
 
-    private GenericRepository<Author>? _authorRepository;
+    private IRepository<Author>? _authorRepository;
     public IRepository<Author> AuthorRepository
     {
         get
@@ -33,7 +33,7 @@ public class UnitOfWork : IUnitOfWork
         }
     }
 
-    private GenericRepository<Member>? _memberRepository;
+    private IRepository<Member>? _memberRepository;
     public IRepository<Member> MemberRepository
     {
         get
@@ -43,7 +43,7 @@ public class UnitOfWork : IUnitOfWork
         }
     }
 
-    private GenericRepository<Borrow>? _borrowRepository;
+    private IRepository<Borrow>? _borrowRepository;
     public IRepository<Borrow> BorrowRepository
     {
         get
