@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EvaAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f33063105875cfee2e1fce40d1f9e9f2213c3ea7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+09ecc60476886a16e8859382e616f021fb5ccdec")]
 [assembly: System.Reflection.AssemblyProductAttribute("EvaAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EvaAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

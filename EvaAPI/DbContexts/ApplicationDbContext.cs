@@ -15,13 +15,16 @@ public class ApplicationDbContext : DbContext
         
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseLazyLoadingProxies();
+        base.OnConfiguring(optionsBuilder);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ApplicationUser>()
             .Ignore(u => u.ProfilePicture);
-
-        modelBuilder.Entity<ApplicationUser>()
-            .Ignore(u => u.ProfilePictureValueHolder);
         
         base.OnModelCreating(modelBuilder);
     }
