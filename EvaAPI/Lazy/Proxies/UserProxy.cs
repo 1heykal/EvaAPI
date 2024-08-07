@@ -1,7 +1,7 @@
 using EvaAPI.Entities;
 using EvaAPI.Services;
 
-namespace EvaAPI.Proxies;
+namespace EvaAPI.Lazy.Proxies;
 
 public class UserProxy : ApplicationUser
 {

@@ -1,4 +1,4 @@
-namespace EvaAPI.Lazy;
+namespace EvaAPI.Lazy.ValueHolders;
 
 public interface IValueHolder<T>
 {
