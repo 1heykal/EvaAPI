@@ -14,4 +14,14 @@ public class ApplicationDbContext : DbContext
     {
         
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ApplicationUser>()
+            .Ignore(u => u.ProfilePicture);
+        
+        
+        
+        base.OnModelCreating(modelBuilder);
+    }
 }
