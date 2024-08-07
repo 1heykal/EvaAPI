@@ -17,10 +17,7 @@ public class UserRepository : GenericRepository<ApplicationUser>
         
         return (List<ApplicationUser>)(await base.GetAllAsync()).Select(u =>
         {
-            u.ProfilePictureValueHolder = new ValueHolder<byte[]>(parameter =>
-            {
-                return ProfilePictureService.GetFor(u.Id);
-            });
+            u.ProfilePictureValueHolder = new Lazy<byte[]>(() => ProfilePictureService.GetFor(u.Id));
 
             return u;
         });

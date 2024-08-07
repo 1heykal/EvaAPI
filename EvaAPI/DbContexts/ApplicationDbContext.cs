@@ -19,8 +19,9 @@ public class ApplicationDbContext : DbContext
     {
         modelBuilder.Entity<ApplicationUser>()
             .Ignore(u => u.ProfilePicture);
-        
-        
+
+        modelBuilder.Entity<ApplicationUser>()
+            .Ignore(u => u.ProfilePictureValueHolder);
         
         base.OnModelCreating(modelBuilder);
     }

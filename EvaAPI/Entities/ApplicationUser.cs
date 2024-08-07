@@ -11,14 +11,8 @@ public class ApplicationUser
     public string UserName { get; set; }
     public string Password { get; set; }
     
-    public IValueHolder<byte[]> ProfilePictureValueHolder { get; set; }
+    public Lazy<byte[]> ProfilePictureValueHolder { get; set; }
 
-    public byte[] ProfilePicture
-    {
-        get
-        {
-            return ProfilePictureValueHolder.GetValue(Id);
-        }
-        
-    }
+    public byte[] ProfilePicture =>  ProfilePictureValueHolder.Value;
+    
 }
